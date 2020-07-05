@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <!-- The CSS package above applies Google styling to buttons and other elements. -->
+
+    <style>
+    .branding-below {
+      top: 0px;
+      bottom: 56px;
+    }
+    .branding-text {
+      left: 7px;
+      position: relative;
+      top: 3px;
+    }
+    .col-contain {
+      overflow: hidden;
+    }
+    .logo {
+      vertical-align: middle;
+    }
+    .width-100 {
+      width: 100%;
+    }
+    
+    .primary-button {
+      border-radius: 8px;
+      background-color: #ea7ead !important;
+      color: black;
+      font-size: 9px;
+    }
+    
+    #button-bar-2 {
+      display: flex;    
+    
+    
+    }
+    </style>
+    
+  </head>
+  <body>
+    <div class="sidebar branding-below">
+      <form>
+        <div class="block form-group">
+          <label for="transliterated-text"><b>Transformed Text</b></label>
+          <textarea class="width-100" id="transliterated-text" rows="10"></textarea>
+        </div>
+        
+        <div class="block" id="button-bar-2">
+          <button class="primary-button" id="onAlterFullDocument">Full Document</button>
+          <button class="primary-button" id="onAlterSelection">Selection</button>
+          <button class="primary-button" id="onAlterFootnotes">Footnotes</button>
+        </div>
+      </form>
+    </div>
+    <div class="sidebar bottom">
+      <img alt="Add-on logo" class="logo" src="https://f0.pngfuel.com/png/38/790/purple-haired-man-in-black-sunglasses-illustration-avatar-beard-icon-bearded-uncle-png-clip-art.png" width="27" height="27">
+      <span class="gray branding-text">Developed by Sami</span>
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+      /**
+       * On document load, assign click handlers to each button and try to load the
+       * user's origin and destination language preferences if previously set.
+       */
+      $(function() {
+        $('#onAlterFullDocument').click(onAlterFullDocument);
+        $('#onAlterSelection').click(onAlterSelection);
+        $("#onAlterFootnotes").click(onAlterFootnotes);
+      });
+
+      /**
+       * Runs a server-side function to alter the full document
+       */
+      function onAlterFullDocument() {
+        this.disabled = true; // disable current element (button)
+        $('#error').remove(); // remove error by ID
+        google.script.run
+            .withSuccessHandler(
+              function(returnSuccess, element) {
+                element.disabled = false;
+              })
+            .withFailureHandler(
+              function(msg, element) {
+                showError(msg, $('#button-bar'));
+                element.disabled = false;
+              })
+            .withUserObject(this)
+            .alterFullDocument();
+      }
+      
+      
+    /**
+       * Runs a server-side function to insert the translated text into the document
+       * at the user's cursor or selection.
+       */
+      function onAlterSelection() {
+        this.disabled = true;
+        $('#error').remove();
+        google.script.run
+            .withSuccessHandler(
+              function(returnSuccess, element) {
+                element.disabled = false;
+              })
+            .withFailureHandler(
+              function(msg, element) {
+                showError(msg, $('#button-bar'));
+                element.disabled = false;
+              })
+            .withUserObject(this)
+            .alterSelection();
+      }
+      
+      function onAlterFootnotes() {
+        this.disabled = true;
+          $('#error').remove();
+          google.script.run
+              .withSuccessHandler(
+                function(returnSuccess, element) {
+                  element.disabled = false;
+                })
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                })
+              .withUserObject(this)
+              .alterFootnotes();
+      }
+      
+      
+      /**
+       * Inserts a div that contains an error message after a given element.
+       *
+       * @param {string} msg The error message to display.
+       * @param {DOMElement} element The element after which to display the error.
+       */
+      function showError(msg, element) {
+        var div = $('<div id="error" class="error">' + msg + '</div>');
+        $(element).after(div);
+      }
+    </script>
+  </body>
+</html>

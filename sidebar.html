@@ -52,6 +52,7 @@
           <button class="primary-button" id="onAlterFullDocument">Full Document</button>
           <button class="primary-button" id="onAlterSelection">Selection</button>
           <button class="primary-button" id="onAlterFootnotes">Footnotes</button>
+          <button class="primary-button" id="onAlterWithoutDollar">Test</button>
         </div>
       </form>
     </div>
@@ -70,6 +71,7 @@
         $('#onAlterFullDocument').click(onAlterFullDocument);
         $('#onAlterSelection').click(onAlterSelection);
         $("#onAlterFootnotes").click(onAlterFootnotes);
+        $('#onAlterWithoutDollar').click(onAlterWithoutDollar);
       });
 
       /**
@@ -129,6 +131,23 @@
                 })
               .withUserObject(this)
               .alterFootnotes();
+      }
+
+      function onAlterWithoutDollar() {
+          this.disabled = true;
+          $('#error').remove();
+          google.script.run
+              .withSuccessHandler(
+                function(returnSuccess, element) {
+                  element.disabled = false;
+                })
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                })
+              .withUserObject(this)
+              .alterWithoutDollar();
       }
       
       

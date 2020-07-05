@@ -292,6 +292,12 @@ function onOpen(e) {
   
   
   }
+
+  function alterWithoutDollar() {
+    Logger.log("hey");
+
+
+  }
   
   /**
   * Extracts the expression between $ ... $, transliterates it, and replaces it by the original expression with a highlight color.
